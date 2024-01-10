@@ -15,83 +15,17 @@ public class InitialSweep
             {
                 Console.WriteLine("Found: "+file);
                 Trace.WriteLine("\nFound: " + file);
-                //ProcessPDF(file);
-                //ProcessTiff(file);
                 ProcessPDFBetter(file);
             }
         }
         else { Console.WriteLine("No PDF files found"); }
     }
     [SupportedOSPlatform("windows")]
-    public static void CheckFailedFolderForPDF(string folder)
-    {
-        
-        Console.WriteLine("Checking if folder contains any PDF...");
-        var files = Directory.GetFiles(folder, "*.pdf");
-        if (files.Length != 0)
-        {
-            foreach (var file in files)
-            {
-                ExampleFixture fixture = new();
-                Console.WriteLine("Found: " + file);
-                var firstPage = fixture.DocNet.Split(file, 0, 0);
-                int pageCount = fixture.DocNet.GetDocReader(file, new Docnet.Core.Models.PageDimensions(1080, 1920)).GetPageCount();
-                var remainingPages = fixture.DocNet.Split(file, 1, pageCount-1);
-                var newPDF = fixture.DocNet.Merge(remainingPages, firstPage);
-                string newFileName = string.Format("{0}Reversed", Path.GetFileNameWithoutExtension(file));
-                var newFile = Path.Combine(folder, newFileName+ ".pdf");
-                File.WriteAllBytes(newFile, newPDF);
-                fixture.Dispose();
-                ProcessPDF(newFile);
-            }
-        }
-        else { Console.WriteLine("No PDF files found"); }
-    }
-    [SupportedOSPlatform("windows")]
-    public static void ProcessPDF(string path)
-    {
-        ExampleFixture fixture = new();
-        PdfToImageExamples pdf = new(fixture);
-
-        int pageHeight = 2220;
-        for (int pageWidth = 1280; pageWidth<5290; pageWidth += 1000)
-        {
-            Console.WriteLine($"Page dimensions are set to {pageWidth} by {pageHeight}");
-            try
-            {
-                if (pdf.ConvertPageToSimpleImageWithLetterOutlines_WhenCalled_ShouldSucceed(path, pageWidth, pageHeight))
-                {
-                    Console.WriteLine($"Processed successfully! Removing original scan at {path}");
-
-                    //File.Move(path, "../../../../BCR.Library/Data/OriginalScans/" + Path.GetFileName(path), true);
-                    File.Delete(path);
-                    break;
-                }
-                else
-                {
-                    //Console.WriteLine("No valid barcodes found. Moving file to FailedScans folder");
-                    File.Move(path, "../../../../BCR.Library/Data/FailedScans/" + Path.GetFileName(path), true);
-                    break;
-                }
-            }
-            catch (ArgumentOutOfRangeException ex)
-            {
-                Console.WriteLine(ex.Message);
-                pageHeight += 1000;
-            }
-        }
-        if (pageHeight> 6000)
-        {
-            Console.WriteLine("ERR: Quality of a scanned image is too poor.");
-            File.Move(path, "../../../../BCR.Library/Data/FailedScans/" + Path.GetFileName(path), true);
-        }
-        
-        fixture.Dispose();
-    }
     public static void ProcessPDFBetter(string path)
     {
         ExampleFixture fixture = new();
         PdfToImageExamples pdf = new(fixture);
+
         int pageHeight = 2220;
         for (int pageWidth = 1280; pageWidth < 5290; pageWidth += 500)
         {
@@ -156,9 +90,5 @@ public class InitialSweep
         }
 
         fixture.Dispose();
-    }
-    public static void ProcessFailedFiles(string path)
-    {
-
     }
 }

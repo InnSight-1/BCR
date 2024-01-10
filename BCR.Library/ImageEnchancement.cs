@@ -8,18 +8,21 @@ public class ImageEnchancement
     [SupportedOSPlatform("windows")]
     public static Bitmap AdjustBCG(Bitmap bmp)
     {
-        float brightness = 1.0f; // no change in brightness
-        float contrast = 1.0f; // twice the contrast
-        float gamma = 3.0f; // no change in gamma
+        float brightness = 1.0f; 
+        float contrast = 1.0f; 
+        float gamma = 1.9f; 
+        //float brightness = 1.0f; // no change in brightness
+        //float contrast = 2.0f; // twice the contrast
+        //float gamma = 1.0f; // no change in gamma
 
         float adjustedBrightness = brightness - 1.0f;
         // create matrix that will brighten and contrast the image
-        float[][] ptsArray ={
-        new float[] {contrast, 0, 0, 0, 0}, // scale red
-        new float[] {0, contrast, 0, 0, 0}, // scale green
-        new float[] {0, 0, contrast, 0, 0}, // scale blue
-        new float[] {0, 0, 0, 1.0f, 0}, // don't scale alpha
-        new float[] {adjustedBrightness, adjustedBrightness, adjustedBrightness, 0, 1}};
+        float[][] ptsArray =[
+        [contrast, 0, 0, 0, 0], // scale red
+        [0, contrast, 0, 0, 0], // scale green
+        [0, 0, contrast, 0, 0], // scale blue
+        [0, 0, 0, 1.0f, 0], // don't scale alpha
+        [adjustedBrightness, adjustedBrightness, adjustedBrightness, 0, 1]];
 
         ImageAttributes imageAttributes = new();
         imageAttributes.ClearColorMatrix();

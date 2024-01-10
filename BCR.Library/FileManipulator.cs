@@ -58,7 +58,7 @@ public class FileManipulator
             //Bitmap adjustedImage;
 
 
-            
+
 
             //var adjustedBitmap = ImageEnchancement.AdjustBCG(bitmaps[i]);
             //var blurredBitmap = ImageEnchancement.FilterProcessImage(1.2, adjustedBitmap);
@@ -69,7 +69,18 @@ public class FileManipulator
             //CreateRotatedPdf("\\\\ARCH-FRIGATE\\Scans\\BCR Test\\20230808094920277s1e1.pdf", blurB);
             //var blurredBitmap = ImageEnchancement.FilterProcessImage(1.2, bitmaps[i]);
 
-            decoded = BarCodeReader.ReadBarcodes(bitmaps[i]);
+
+            decoded = BarCodeReader.ReadBarcodesOnOnePage(bitmaps[i]);
+
+            //if (bitmaps.Count == 1)
+            //{
+            //    decoded = BarCodeReader.ReadBarcodesOnOnePage(bitmaps[i]);
+            //}
+            //else
+            //{
+            //    decoded = BarCodeReader.ReadBarcodes(bitmaps[i]);
+            //}
+
             //decoded = BarCodeReader.ReadBarcodes(blurredBitmap);
             if (decoded is not null && foundBarcode is null)
             {
@@ -82,6 +93,7 @@ public class FileManipulator
                     foundBarcode.StartPage = bitmaps.Count - 1;
                     foundBarcode.EndPage = i;
                     decodedList.Add(foundBarcode);
+                    break;
                 }
                 //Full_Packet can hold travelers. Let's keep them there
                 if (foundBarcode.Folderpath.EndsWith("Full_Packet"))
@@ -264,43 +276,5 @@ public class FileManipulator
             stopwatch.Stop();
             Console.WriteLine($"Splitting and copying took {stopwatch.ElapsedMilliseconds} milliseconds");
         }
-    }
-    public static List<Bitmap> MakeGrayscale(List<Bitmap> originalList)
-    {
-        List<Bitmap> result = new();
-        foreach (Bitmap original in originalList)
-        {
-            //create a blank bitmap the same size as original
-            Bitmap newBitmap = new(original.Width, original.Height);
-
-            //get a graphics object from the new image
-            using (Graphics g = Graphics.FromImage(newBitmap))
-            {
-
-                //create the grayscale ColorMatrix
-                ColorMatrix colorMatrix = new ColorMatrix(
-                   new float[][]
-                   {
-             new float[] {.3f, .3f, .3f, 0, 0},
-             new float[] {.59f, .59f, .59f, 0, 0},
-             new float[] {.11f, .11f, .11f, 0, 0},
-             new float[] {0, 0, 0, 1, 0},
-             new float[] {0, 0, 0, 0, 1}
-                   });
-
-                //create some image attributes
-                using ImageAttributes attributes = new ImageAttributes();
-
-                //set the color matrix attribute
-                attributes.SetColorMatrix(colorMatrix);
-
-                //draw the original image on the new image
-                //using the grayscale color matrix
-                g.DrawImage(original, new Rectangle(0, 0, original.Width, original.Height),
-                            0, 0, original.Width, original.Height, GraphicsUnit.Pixel, attributes);
-            }
-            result.Add(newBitmap);
-        }
-        return result;
     }
 }
