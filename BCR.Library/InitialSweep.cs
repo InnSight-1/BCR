@@ -13,7 +13,7 @@ public class InitialSweep
         {
             foreach (var file in files)
             {
-                Console.WriteLine("Found: "+file);
+                //Console.WriteLine("Found: "+file);
                 Trace.WriteLine("\nFound: " + file);
                 ProcessPDFBetter(file);
             }
@@ -41,7 +41,11 @@ public class InitialSweep
                     var barcodes = FileManipulator.CheckBitmapForBarcodes(bitmaps);
                     if (barcodes.Count>0)
                     {
+                        Console.WriteLine("Checking if pages need rotation...");
+                        Stopwatch stopwatch = Stopwatch.StartNew();
                         var jpegPath = FileManipulator.CreateRotatedPdf(path, bitmaps);
+                        stopwatch.Stop();
+                        Console.WriteLine($"Process took {stopwatch.ElapsedMilliseconds} milliseconds");
                         try
                         {
                             FileManipulator.HandleFiles(barcodes, jpegPath);

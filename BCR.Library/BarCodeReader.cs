@@ -1,6 +1,4 @@
 ﻿using BCR.Library.Models;
-using Docnet.Core;
-using Docnet.Core.Editors;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -76,7 +74,7 @@ public class BarCodeReader
                 //}
 
 
-                var adjustedBitmap = ImageEnchancement.AdjustBCG(oBitmap);
+                var adjustedBitmap = ImageEnchancement.AdjustBCG(oBitmap, 2.0f);
                 //debugging
                 adjustedBitmap.Save("../../../../BCR.Library/Data/TempPng/adjusted.jpeg", ImageFormat.Jpeg);
 
@@ -155,9 +153,8 @@ public class BarCodeReader
     [SupportedOSPlatform("windows")]
     public static Barcode? ReadBarcodesOnOnePage(Bitmap oBitmap)
     {
-        Stopwatch stopwatch = Stopwatch.StartNew();
         Console.WriteLine("Detecting barcodes...");
-
+        Stopwatch stopwatch = Stopwatch.StartNew();
         //var reader = new BarcodeReader(null, null, ls => new GlobalHistogramBinarizer(ls))
         //BarcodeReader reader = new(null, bitmap => new BitmapLuminanceSource(bitmap), luminance => new GlobalHistogramBinarizer(luminance))
         BarcodeReader reader = new(null, bitmap => new BitmapLuminanceSource(bitmap), luminance => new HybridBinarizer(luminance))
@@ -175,6 +172,7 @@ public class BarCodeReader
         };
         Bitmap croppedTopRight = null;
         Bitmap croppedBotRight = null;
+
         if (oBitmap.Width > oBitmap.Height)
         {
             croppedTopRight = oBitmap.Clone(new RectangleF(oBitmap.Width * .28f, 0, oBitmap.Width * .32f, oBitmap.Height * .15f), oBitmap.PixelFormat);
@@ -194,20 +192,26 @@ public class BarCodeReader
         Result fileName = reader.Decode(croppedTopRight);
         var folderPath = reader.Decode(croppedBotRight);
         var blur = 1.2;
-        while (fileName is null && blur <1.5)
+        var gamma = 1.5f;
+
+        Bitmap adjustedBitmap = null;
+        while (fileName is null && gamma <4.1f)
         {
-            var adjustedBitmap = ImageEnchancement.AdjustBCG(croppedTopRight);
+            adjustedBitmap = ImageEnchancement.AdjustBCG(croppedTopRight, gamma);
             //debugging
             adjustedBitmap.Save("../../../../BCR.Library/Data/TestPng/adjustedTop.jpeg", ImageFormat.Jpeg);
 
             fileName = reader.Decode(adjustedBitmap);
             if (fileName is not null)
             {
-                Trace.WriteLine("Gamma adjustment helped");
+                Console.WriteLine("Gamma adjustment helped");
                 barcode.Filename = fileName.ToString();
                 break;
             }
-
+            gamma += 0.1f;
+        }
+        while (fileName is null && ((blur < 4.8 && oBitmap.Height > 4000) || (blur < 2.8 && oBitmap.Height < 4000)))
+        {
             var blurredBitmap = ImageEnchancement.FilterProcessImage(blur, adjustedBitmap);
             //debugging
             blurredBitmap.Save("../../../../BCR.Library/Data/TestPng/blurredTop.jpeg", ImageFormat.Jpeg);
@@ -215,27 +219,35 @@ public class BarCodeReader
             fileName = reader.Decode(blurredBitmap);
             if (fileName is not null)
             {
-                Trace.WriteLine("Thank you, Gauss!");
+                Console.WriteLine("Thank you, Gauss!");
                 barcode.Filename = fileName.ToString();
                 break;
             }
             blur += 0.1;
+            if (oBitmap.Height > 4000)
+            {
+                blur += 0.3;
+            }
         }
         blur = 1.2;
-        while (folderPath is null && blur < 1.5)
+        gamma = 1.5f;
+        while (folderPath is null && gamma < 4.1f)
         {
-            var adjustedBitmap = ImageEnchancement.AdjustBCG(croppedBotRight);
+            adjustedBitmap = ImageEnchancement.AdjustBCG(croppedBotRight, gamma);
             //debugging
             adjustedBitmap.Save("../../../../BCR.Library/Data/TestPng/adjustedBot.jpeg", ImageFormat.Jpeg);
 
             folderPath = reader.Decode(adjustedBitmap);
             if (folderPath is not null)
             {
-                Trace.WriteLine("Gamma adjustment helped");
+                Console.WriteLine("Gamma adjustment helped");
                 barcode.Folderpath = folderPath.ToString();
                 break;
             }
-
+            gamma += 0.1f;
+        }
+        while (folderPath is null && ((blur < 4.8 && oBitmap.Height > 4000) || (blur < 2.8 && oBitmap.Height < 4000)))
+        {
             var blurredBitmap = ImageEnchancement.FilterProcessImage(blur, adjustedBitmap);
             //debugging
             blurredBitmap.Save("../../../../BCR.Library/Data/TestPng/blurredBot.jpeg", ImageFormat.Jpeg);
@@ -243,11 +255,15 @@ public class BarCodeReader
             folderPath = reader.Decode(blurredBitmap);
             if (folderPath is not null)
             {
-                Trace.WriteLine("Thank you, Gauss!");
+                Console.WriteLine("Thank you, Gauss!");
                 barcode.Folderpath = folderPath.ToString();
                 break;
             }
             blur += 0.1;
+            if (oBitmap.Height > 4000)
+            {
+                blur += 0.3;
+            }
         }
         if (fileName is not null)
         {
@@ -263,11 +279,12 @@ public class BarCodeReader
 
         if (folderPath is not null && fileName is not null)
         {
+            Console.WriteLine("Got barcodes");
             return barcode;
         }
         if (fileName is null && folderPath is null)
         {
-            Trace.WriteLine("No valid barcodes detected");
+            Console.WriteLine("No valid barcodes detected");
             //string pngPath = PdfToImageExamples.CreateRotatedPdf(path, oBitmap);
             //oBitmap.Dispose();
             //Console.WriteLine("Deleting png...");

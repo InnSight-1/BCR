@@ -69,7 +69,7 @@ public class FileManipulator
             //CreateRotatedPdf("\\\\ARCH-FRIGATE\\Scans\\BCR Test\\20230808094920277s1e1.pdf", blurB);
             //var blurredBitmap = ImageEnchancement.FilterProcessImage(1.2, bitmaps[i]);
 
-
+            Console.Write($"Page {i+1}: ");
             decoded = BarCodeReader.ReadBarcodesOnOnePage(bitmaps[i]);
 
             //if (bitmaps.Count == 1)
@@ -134,7 +134,7 @@ public class FileManipulator
             }
             else if (decoded is null && foundBarcode is null)
             {
-                Console.WriteLine("WARN: First page does not contain proper barcodes. Moving whole file to FailedScans folder");
+                Console.WriteLine("WARN: First page does not contain proper barcodes.");
                 break;
             }
         }
@@ -152,7 +152,7 @@ public class FileManipulator
         foreach (var bmp in bmpList)
         {
             using var stream = new MemoryStream();
-            Console.WriteLine($"Deciding if page {page} needs rotation...");
+            //Console.WriteLine($"Deciding if page {page} needs rotation...");
             page++;
             var rotatedImage = _fileHandler.Rotate(bmp);
 
@@ -186,9 +186,8 @@ public class FileManipulator
             {
                 listFiles.Add(Path.Combine(folder, jpegPath + $"({i:000}).jpeg"));
             }
-            Console.WriteLine($"Pages {b.StartPage + 1} to {b.EndPage + 1} of scanned batch will be used to create pdf");
             Trace.WriteLine($"Pages {b.StartPage + 1} to {b.EndPage + 1} of scanned batch will be used to create pdf");
-            Stopwatch stopwatch = Stopwatch.StartNew();
+
             //var bytes = DocLib.Instance.Split(path, startPage, endPage);
 
             //var files = listFiles.ToArray();
@@ -264,7 +263,6 @@ public class FileManipulator
                 }
 
                 File.WriteAllBytes(newFullPath, bytes);
-                Console.WriteLine("Copied file to: " + destination + " Named it " + Path.GetFileName(newFullPath));
                 Trace.WriteLine("Copied file to: " + destination + " Named it " + Path.GetFileName(newFullPath));
             }
             catch (Exception ex)
@@ -273,8 +271,6 @@ public class FileManipulator
                 Trace.WriteLine(ex.Message);
                 throw;
             }
-            stopwatch.Stop();
-            Console.WriteLine($"Splitting and copying took {stopwatch.ElapsedMilliseconds} milliseconds");
         }
     }
 }

@@ -37,7 +37,7 @@ public class FileWatcher
     private static void OnCreated(object sender, FileSystemEventArgs e)
     {
         string value = $"Created: {e.FullPath}";
-        Console.WriteLine(value);
+        //Console.WriteLine(value);
         Trace.WriteLine("\n"+value);
         InitialSweep.ProcessPDFBetter(e.FullPath);
         //InitialSweep.ProcessTiff(e.FullPath);
