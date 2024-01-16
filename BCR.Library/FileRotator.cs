@@ -45,8 +45,8 @@ public class FileRotator
         g.FillRectangle(Brushes.White, 0, 0, bmp.Width, bmp.Height);
 
         var angle = (float)GetSkewAngle() * -1;
-       
-        if (angle > 3.98 || angle <-2)
+
+        if (angle > 3.98 || angle < -2)
         {
             angle = 0.5F;
             Console.WriteLine($"WARN: Adjusting angle to {angle}");
@@ -56,6 +56,26 @@ public class FileRotator
             Console.WriteLine($"Will rotate by {angle}");
             g.RotateTransform(angle);
         }
+        g.DrawImage(bmp, 0, 0);
+        g.Dispose();
+        //tmp = new Bitmap(tmp, new Size((int)(tmp.Width *2), (int)(tmp.Height *2)));
+        return tmp;
+    }
+    public Bitmap RotateCroped(Bitmap bmp)
+    {
+        _internalBmp = bmp;
+        Bitmap tmp = new Bitmap(bmp.Width, bmp.Height, PixelFormat.Format32bppRgb);
+        tmp.SetResolution(bmp.HorizontalResolution, bmp.VerticalResolution);
+        Graphics g = Graphics.FromImage(tmp);
+
+        g.FillRectangle(Brushes.White, 0, 0, bmp.Width, bmp.Height);
+
+        var angle = (float)GetSkewAngle() * -1;
+
+
+            Console.WriteLine($"Will rotate by {angle}");
+            g.RotateTransform(angle);
+
         g.DrawImage(bmp, 0, 0);
         g.Dispose();
         //tmp = new Bitmap(tmp, new Size((int)(tmp.Width *2), (int)(tmp.Height *2)));

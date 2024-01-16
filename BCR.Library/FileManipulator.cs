@@ -3,8 +3,10 @@ using Docnet.Core;
 using Docnet.Core.Editors;
 using Docnet.Core.Models;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Runtime.Versioning;
 
 namespace BCR.Library;
@@ -32,6 +34,40 @@ public class FileManipulator
         string extension = Path.GetExtension(path);
         string newPdf = Path.Combine(folder, newPdfFileName+extension);
         File.WriteAllBytes(newPdf, bytes);
+    }
+    public static void MergePdf()
+    {
+        var folder = Path.GetDirectoryName("..\\..\\..\\..\\BCR.Library\\Data\\Merge\\");
+        var pdfFiles = Directory.GetFiles(folder, "*.pdf");
+        byte[] bytes = null;
+        if (pdfFiles.Length > 1)
+        {
+            for (int i = 1; i < pdfFiles.Length; i++)
+            {
+                string newPdf = Path.Combine(folder + "/" + Path.GetFileNameWithoutExtension(pdfFiles[0]) + "X" + ".pdf");
+                if (i == 1)
+                {
+                    bytes = DocLib.Instance.Merge(pdfFiles[i], pdfFiles[i-1]);
+                    if (pdfFiles.Length > 2)
+                    {
+                        File.WriteAllBytes(newPdf, bytes);
+                    }
+                }
+                else if (pdfFiles.Length - i == 1)
+                {
+                    bytes = DocLib.Instance.Merge(newPdf, pdfFiles[i]);
+                    break;
+                }
+                else
+                {
+                    bytes = DocLib.Instance.Merge(newPdf, pdfFiles[i]);
+                    File.WriteAllBytes(newPdf, bytes);
+                }
+            }
+            Array.ForEach(Directory.GetFiles(folder, "*.pdf"), File.Delete);
+            string destination = "\\\\ARCH-FRIGATE\\Scans\\BCR Test\\" + "merged" + ".pdf";
+            File.WriteAllBytes(destination, bytes);
+        }
     }
     public static List<Barcode> CheckBitmapForBarcodes(List<Bitmap> bitmaps)
     {
@@ -71,7 +107,20 @@ public class FileManipulator
 
             Console.Write($"Page {i+1}: ");
             decoded = BarCodeReader.ReadBarcodesOnOnePage(bitmaps[i]);
+            //decoded = BarCodeReader.ReadBarcodes(bitmaps[i]);
 
+            //if (decoded is not null && decoded.Filename is not null && foundBarcode is not null)
+            //{
+            //    if (foundBarcode.Filename == decoded.Filename)
+            //    {
+            //        decoded = foundBarcode;
+            //    }
+            //}
+
+            //if (decoded is not null && (decoded.Filename is null || decoded.Folderpath is null))
+            //{
+            //    throw new ArgumentOutOfRangeException("Did not find exactly two valid barcodes on one page");
+            //}
             //if (bitmaps.Count == 1)
             //{
             //    decoded = BarCodeReader.ReadBarcodesOnOnePage(bitmaps[i]);
@@ -267,7 +316,7 @@ public class FileManipulator
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                //Console.WriteLine(ex.Message);
                 Trace.WriteLine(ex.Message);
                 throw;
             }

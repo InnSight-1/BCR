@@ -364,3 +364,4 @@ FodyWeavers.xsd
 *.pdf
 /BCR.Library/Data/log.txt
 /BCR.Library/Data/TestPng
+*.jpeg

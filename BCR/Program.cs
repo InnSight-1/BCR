@@ -28,7 +28,7 @@ FileWatcher.Watch();
 
 //string fileName = "";
 //string splitPage = "";
-
+//FileManipulator.MergePdf();
 //while (fileName != "q" || splitPage != "q")
 //{
 //    Console.WriteLine("Enter 'q' at any time ypu wish to exit");

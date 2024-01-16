@@ -8,7 +8,7 @@ public class ImageEnchancement
     [SupportedOSPlatform("windows")]
     public static Bitmap AdjustBCG(Bitmap bmp, float gamma)
     {
-        float brightness = 0.96f; 
+        float brightness = .96f; 
         float contrast = 1.1f; 
         //float gamma = 3.9f; 
         //float brightness = 1.0f; // no change in brightness
