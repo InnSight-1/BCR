@@ -207,7 +207,10 @@ public class BarCodeReader
         //var result = reader.DecodeMultiple(oBitmap);
         Result fileName = reader.Decode(croppedTopRight);
         var folderPath = reader.Decode(croppedBotRight);
-
+        if (fileName is not null)
+        {
+            fileName = ValidateFilename(fileName);
+        }
         if (fileName == null)
         {
             fileName = ProcessBarcode(oBitmap, reader, croppedTopRight);
@@ -217,11 +220,11 @@ public class BarCodeReader
                 //croppedTopRightRotated.Save("../../../../BCR.Library/Data/TestPng/croppedTopRightRotated.jpeg", ImageFormat.Jpeg);
 
                 fileName = reader.Decode(croppedTopRightRotated);
-                
-                if (fileName == null)
+                if (fileName is not null)
                 {
-                    fileName = ProcessBarcode(oBitmap, reader, croppedTopRightRotated);
+                    fileName = ValidateFilename(fileName); 
                 }
+                fileName ??= ProcessBarcode(oBitmap, reader, croppedTopRightRotated);
             }
         }
 
@@ -235,10 +238,7 @@ public class BarCodeReader
 
                 folderPath = reader.Decode(croppedBotRightRotated);
 
-                if (folderPath == null)
-                {
-                    folderPath = ProcessBarcode(oBitmap, reader, croppedBotRightRotated);
-                }
+                folderPath ??= ProcessBarcode(oBitmap, reader, croppedBotRightRotated);
             }
         }
         
@@ -319,11 +319,11 @@ public class BarCodeReader
         //}
         if (fileName is not null)
         {
-            barcode.Filename = fileName.ToString();
+            barcode.Filename = fileName.Text;
         }
         if (folderPath is not null)
         {
-            barcode.Folderpath = folderPath.ToString();
+            barcode.Folderpath = folderPath.Text;
         }
         
         stopwatch.Stop();
@@ -369,8 +369,15 @@ public class BarCodeReader
             result = reader.Decode(adjustedBitmap);
             if (result is not null)
             {
-                Console.WriteLine("Gamma adjustment helped");
-                return result;
+                if (result.Text.Length < 10)
+                {
+                    result = ValidateFilename(result);
+                }
+                if (result is not null)
+                {
+                    Console.WriteLine("Gamma adjustment helped");
+                    return result;
+                }
             }
             gamma += 0.1f;
         }
@@ -386,8 +393,15 @@ public class BarCodeReader
             result = reader.Decode(blurredBitmap);
             if (result is not null)
             {
-                Console.WriteLine("Thank you, Gauss!");
-                return result;
+                if (result.Text.Length < 10)
+                {
+                    result = ValidateFilename(result);
+                }
+                if (result is not null)
+                {
+                    Console.WriteLine("Thank you, Gauss!");
+                    return result;
+                }
             }
             blur += 1;
             if (oBitmap.Height > 4000)
@@ -396,6 +410,10 @@ public class BarCodeReader
             }
         }
         return null;
+    }
+    public static Result? ValidateFilename(Result result)
+    {
+        return result.Text.All(c => char.IsLetterOrDigit(c) || c.Equals('-'))  ? result : null;
     }
 }
 

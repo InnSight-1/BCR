@@ -90,7 +90,7 @@ public class InitialSweep
             //string splitted = FileManipulator.SplitPdf(path, 0, endPage);
             //FileManipulator.SplitPdf(path, endPage, endPage);
             //FileManipulator.SplitPdf(path, endPage, lastPage);
-            File.Copy(path, "\\\\ARCH-FRIGATE\\Scans\\Failed Scans" + Path.GetFileName(path), true);
+            File.Copy(path, "\\\\ARCH-FRIGATE\\Scans\\Failed Scans\\" + Path.GetFileName(path), true);
             File.Move(path, "../../../../BCR.Library/Data/FailedScans/" + Path.GetFileName(path), true);
             //File.Copy(splitted, "../../../../BCR.Library/Data/FailedScans/" + Path.GetFileName(splitted), true);
         }
