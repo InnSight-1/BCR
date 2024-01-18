@@ -8,8 +8,8 @@ public class ImageEnchancement
     [SupportedOSPlatform("windows")]
     public static Bitmap AdjustBCG(Bitmap bmp, float gamma)
     {
-        float brightness = .96f; 
-        float contrast = 1.1f; 
+        float brightness = .96f;//1.2f; //1.2f is for brighter image (helps when black marker interferes with barcode)
+        float contrast = 1.1f; //1.0f; //1.0f is for brighter image (helps when black marker interferes with barcode)
         //float gamma = 3.9f; 
         //float brightness = 1.0f; // no change in brightness
         //float contrast = 2.0f; // twice the contrast
