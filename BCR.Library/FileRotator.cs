@@ -1,7 +1,9 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
+using System.Runtime.Versioning;
 
 namespace BCR.Library;
+[SupportedOSPlatform("windows")]
 public class FileRotator
 {
     // Representation of a line in the image.  
@@ -49,11 +51,11 @@ public class FileRotator
         if (angle > 3.98 || angle < -2)
         {
             angle = 0.5F;
-            Console.WriteLine($"WARN: Adjusting angle to {angle}");
+            Console.WriteLine($"WARN: Adjusting angle to {angle}°");
         }
         if (angle >= 0.5)
         {
-            Console.WriteLine($"Will rotate by {angle}");
+            Console.WriteLine($"Will rotate by {angle}°");
             g.RotateTransform(angle);
         }
         g.DrawImage(bmp, 0, 0);
@@ -73,7 +75,7 @@ public class FileRotator
         var angle = (float)GetSkewAngle() * -1;
 
 
-            Console.WriteLine($"Will rotate by {angle}");
+            Console.WriteLine($"Will rotate by {angle}°");
             g.RotateTransform(angle);
 
         g.DrawImage(bmp, 0, 0);

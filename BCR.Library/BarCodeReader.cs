@@ -2,9 +2,11 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Runtime.Intrinsics.X86;
 using System.Runtime.Versioning;
 using ZXing;
 using ZXing.Common;
+using ZXing.Multi;
 using ZXing.Windows.Compatibility;
 
 namespace BCR.Library;
@@ -170,12 +172,28 @@ public class BarCodeReader
                 TryHarder = true,
                 PureBarcode = true,
                 //ReturnCodabarStartEnd = true,
-                PossibleFormats = new List<BarcodeFormat> { BarcodeFormat.CODE_128, BarcodeFormat.PDF_417 }
+                PossibleFormats = [BarcodeFormat.CODE_128, BarcodeFormat.PDF_417]
             }
         };
 
         Bitmap croppedTopRight = null;
         Bitmap croppedBotRight = null;
+
+        //                      out of memory
+        //                      
+        //                         w (size)
+        // x,y(0,0)_______________________1,0
+        // |                     |          |
+        // |                   y |          | l (size)
+        // |                     | rectangle|
+        // |                     |          |
+        // |                     |__________|
+        // |         image             x    |
+        // |                                |
+        // |                                |
+        // |0,1__________________________1,1|
+
+        //oBitmap.RotateFlip(RotateFlipType.Rotate180FlipNone);
 
         if (oBitmap.Width > oBitmap.Height)
         {
@@ -184,7 +202,7 @@ public class BarCodeReader
         }
         else
         {
-            croppedTopRight = oBitmap.Clone(new RectangleF(oBitmap.Width * .68f, oBitmap.Height * .02f, oBitmap.Width * .32f, oBitmap.Height * .15f), oBitmap.PixelFormat);
+            croppedTopRight = oBitmap.Clone(new RectangleF(oBitmap.Width * .65f, oBitmap.Height * .02f, oBitmap.Width * .32f, oBitmap.Height * .15f), oBitmap.PixelFormat);
             croppedBotRight = oBitmap.Clone(new RectangleF(oBitmap.Width * .43f, oBitmap.Height * .76f, oBitmap.Width * .57f, oBitmap.Height * .2f), oBitmap.PixelFormat);
         }
        
@@ -252,6 +270,27 @@ public class BarCodeReader
         {
             Console.WriteLine("Got barcodes");
             return barcode;
+        }
+        //proved to be too labor intensive leaving here for debugging only
+        else if (folderPath is not null && fileName is null && (oBitmap.Width > 6000 || oBitmap.Height > 6000))
+        {
+            Trace.TraceWarning($"Please enter the file name for the following path: {barcode.Folderpath}");
+            barcode.Filename = Console.ReadLine();
+            Trace.TraceWarning($"Your input: {barcode.Filename}");
+            if (!string.IsNullOrEmpty(barcode.Filename))
+            {
+                return barcode;
+            }
+        }
+        else if (folderPath is null && fileName is not null && (oBitmap.Width > 6000 || oBitmap.Height > 6000))
+        {
+            Trace.TraceWarning($"Please enter folder path for this: {barcode.Filename}");
+            barcode.Folderpath = Console.ReadLine();
+            Trace.TraceWarning($"Your input: {barcode.Folderpath}");
+            if (!string.IsNullOrEmpty(barcode.Folderpath))
+            {
+                return barcode;
+            }
         }
         if (fileName is null && folderPath is null)
         //else

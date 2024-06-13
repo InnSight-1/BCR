@@ -3,10 +3,8 @@ using Docnet.Core;
 using Docnet.Core.Editors;
 using Docnet.Core.Models;
 using System.Diagnostics;
-using System.Diagnostics.Metrics;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
 using System.Runtime.Versioning;
 
 namespace BCR.Library;
@@ -29,10 +27,10 @@ public class FileManipulator
     public static void PdfSplitter(string path, int startPage, int endPage)
     {
         byte[] bytes = DocLib.Instance.Split(path, startPage, endPage);
-        string newPdfFileName = Path.GetFileNameWithoutExtension(path)+$"s{startPage}e{endPage}";
+        string newPdfFileName = Path.GetFileNameWithoutExtension(path) + $"s{startPage}e{endPage}";
         string folder = Path.GetDirectoryName(path);
         string extension = Path.GetExtension(path);
-        string newPdf = Path.Combine(folder, newPdfFileName+extension);
+        string newPdf = Path.Combine(folder, newPdfFileName + extension);
         File.WriteAllBytes(newPdf, bytes);
     }
     public static void MergePdf()

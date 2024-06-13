@@ -56,7 +56,8 @@ public class InitialSweep
                             continue;
                         }
                         //File.Delete(path);
-                        File.Move(path, "../../../../BCR.Library/Data/OriginalScans/" + Path.GetFileName(path), true);
+                        //File.Move(path, "../../../../BCR.Library/Data/OriginalScans/" + Path.GetFileName(path), true);
+                        File.Move(path, "C:\\Users\\vladimir\\Downloads\\OriginalScans/" + Path.GetFileName(path), true);
                         break;
                     }
                     else
@@ -72,7 +73,8 @@ public class InitialSweep
                 {
                     //Console.WriteLine("No valid barcodes found. Moving file to FailedScans folder");
                     File.Copy(path, "\\\\ARCH-FRIGATE\\Scans\\Failed Scans" + Path.GetFileName(path), true);
-                    File.Move(path, "../../../../BCR.Library/Data/FailedScans/" + Path.GetFileName(path), true);
+                    //File.Move(path, "../../../../BCR.Library/Data/FailedScans/" + Path.GetFileName(path), true);
+                    File.Move(path, "C:\\Users\\vladimir\\Downloads\\FailedScans/" + Path.GetFileName(path), true);
                     break;
                 }
             }
@@ -91,7 +93,8 @@ public class InitialSweep
             //FileManipulator.SplitPdf(path, endPage, endPage);
             //FileManipulator.SplitPdf(path, endPage, lastPage);
             File.Copy(path, "\\\\ARCH-FRIGATE\\Scans\\Failed Scans\\" + Path.GetFileName(path), true);
-            File.Move(path, "../../../../BCR.Library/Data/FailedScans/" + Path.GetFileName(path), true);
+            //File.Move(path, "../../../../BCR.Library/Data/FailedScans/" + Path.GetFileName(path), true);
+            File.Move(path, "C:\\Users\\vladimir\\Downloads\\FailedScans/" + Path.GetFileName(path), true);
             //File.Copy(splitted, "../../../../BCR.Library/Data/FailedScans/" + Path.GetFileName(splitted), true);
         }
 
