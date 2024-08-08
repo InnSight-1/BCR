@@ -68,36 +68,6 @@ namespace BCR.Library
 
                     AddBytes(bmp, rawBytes);
                     DrawRectangles(bmp, characters);
-                    //int x = (int)(height * 1.2);
-                    //Bitmap newBitmap = new(x, height, bmp.PixelFormat);
-                    //using (Graphics g = Graphics.FromImage(newBitmap))
-                    //{
-                    //    RectangleF dst = new(0, 0, x, height * 2);
-                    //    RectangleF src = new(0, 0, bmp.Width, bmp.Height);
-                    //    g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-                    //    g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
-                    //    g.DrawImage(bmp, dst, src, GraphicsUnit.Pixel);
-                    //}
-
-                    //AddBytes(newBitmap, rawBytes);
-                    //DrawRectangles(newBitmap, characters);
-                    //bitmaps.Add(newBitmap);
-                    //using var stream = new MemoryStream();
-                    //bmp.Save(stream, ImageFormat.Jpeg);
-                    //string jpegFilePath;
-                    //int counter = 001;
-                    //string jpegPath = Path.ChangeExtension(path, ".jpeg");
-                    //jpegPath = Path.Combine("../../../../BCR.Library/Data/TempPng", Path.GetFileNameWithoutExtension(jpegPath) + Path.GetExtension(jpegPath));
-                    //string pngFileName = Path.GetFileNameWithoutExtension(jpegPath);
-                    //do
-                    //{
-                    //    string tempFileName = string.Format("{0}({1})", pngFileName, counter++.ToString("000"));
-                    //    //string tempFileName = string.Format("{0}", counter++.ToString("000"));
-                    //    jpegFilePath = Path.Combine("../../../../BCR.Library/Data/TempPng", tempFileName + Path.GetExtension(jpegPath));
-                    //}
-                    //while (File.Exists(jpegFilePath));
-                    //File.WriteAllBytes(jpegFilePath, stream.ToArray());
-                    //stream.Dispose();
 
                     bitmaps.Add(bmp);
                 }

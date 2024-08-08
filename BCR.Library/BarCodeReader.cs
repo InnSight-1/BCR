@@ -158,7 +158,7 @@ public class BarCodeReader
         var _fileHandler = new FileRotator();
 
         Console.WriteLine("Detecting barcodes...");
-        Stopwatch stopwatch = Stopwatch.StartNew();
+        //Stopwatch stopwatch = Stopwatch.StartNew();
 
         //var reader = new BarcodeReader(null, null, ls => new GlobalHistogramBinarizer(ls))
         //BarcodeReader reader = new(null, bitmap => new BitmapLuminanceSource(bitmap), luminance => new GlobalHistogramBinarizer(luminance))
@@ -202,8 +202,8 @@ public class BarCodeReader
         }
         else
         {
-            croppedTopRight = oBitmap.Clone(new RectangleF(oBitmap.Width * .65f, oBitmap.Height * .02f, oBitmap.Width * .32f, oBitmap.Height * .15f), oBitmap.PixelFormat);
-            croppedBotRight = oBitmap.Clone(new RectangleF(oBitmap.Width * .43f, oBitmap.Height * .76f, oBitmap.Width * .57f, oBitmap.Height * .2f), oBitmap.PixelFormat);
+            croppedTopRight = oBitmap.Clone(new RectangleF(oBitmap.Width * .65f, oBitmap.Height * .015f, oBitmap.Width * .35f, oBitmap.Height * .15f), oBitmap.PixelFormat);
+            croppedBotRight = oBitmap.Clone(new RectangleF(oBitmap.Width * .43f, oBitmap.Height * .75f, oBitmap.Width * .57f, oBitmap.Height * .2f), oBitmap.PixelFormat);
         }
        
         //var croppedBotRightRotated = _fileHandler.RotateCroped(croppedBotRight);
@@ -211,8 +211,8 @@ public class BarCodeReader
         //var croppedBotRightRotated = croppedBotRight;//_fileHandler.Rotate(croppedBotRight);
 
         //croppedBotRightRotated.Save("../../../../BCR.Library/Data/TestPng/croppedBotRightRotated.jpeg", ImageFormat.Jpeg);
-        //croppedTopRight.Save("../../../../BCR.Library/Data/TestPng/croppedTopRight.jpeg", ImageFormat.Jpeg);
-        //croppedBotRight.Save("../../../../BCR.Library/Data/TestPng/croppedBotRight.jpeg", ImageFormat.Jpeg);
+        croppedTopRight.Save("../../../../BCR.Library/Data/TestPng/croppedTopRight.jpeg", ImageFormat.Jpeg);
+        croppedBotRight.Save("../../../../BCR.Library/Data/TestPng/croppedBotRight.jpeg", ImageFormat.Jpeg);
 
         Barcode barcode = new();
 
@@ -229,7 +229,7 @@ public class BarCodeReader
             if (fileName == null)
             {
                 var croppedTopRightRotated = _fileHandler.RotateCroped(croppedTopRight);
-                //croppedTopRightRotated.Save("../../../../BCR.Library/Data/TestPng/croppedTopRightRotated.jpeg", ImageFormat.Jpeg);
+                croppedTopRightRotated.Save("../../../../BCR.Library/Data/TestPng/croppedTopRightRotated.jpeg", ImageFormat.Jpeg);
 
                 fileName = reader.Decode(croppedTopRightRotated);
                 if (fileName is not null)
@@ -246,7 +246,7 @@ public class BarCodeReader
             if (folderPath == null)
             {
                 var croppedBotRightRotated = _fileHandler.RotateCroped(croppedBotRight);
-                //croppedBotRightRotated.Save("../../../../BCR.Library/Data/TestPng/croppedBotRightRotated.jpeg", ImageFormat.Jpeg);
+                croppedBotRightRotated.Save("../../../../BCR.Library/Data/TestPng/croppedBotRightRotated.jpeg", ImageFormat.Jpeg);
 
                 folderPath = reader.Decode(croppedBotRightRotated);
 
@@ -263,8 +263,8 @@ public class BarCodeReader
             barcode.Folderpath = folderPath.Text;
         }
         
-        stopwatch.Stop();
-        Console.WriteLine($"Process took {stopwatch.ElapsedMilliseconds} milliseconds");
+        //stopwatch.Stop();
+        //Console.WriteLine($"Process took {stopwatch.ElapsedMilliseconds} milliseconds");
 
         if (folderPath is not null && fileName is not null)
         {

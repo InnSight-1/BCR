@@ -75,60 +75,9 @@ public class FileManipulator
         int startPage = 0;
         for (int i = 0; i < bitmaps.Count; i++)
         {
-            //var blurredBitmap = MakeGrayscale(bitmaps);//ImageEnchancement.FilterProcessImage(2, bitmaps[i]);
-            //var blurredBitmap = ImageEnchancement.FilterProcessImage(1.6, bitmaps[i]);
-
-            //Rectangle r = new(0, 0, bitmaps[i].Width, bitmaps[i].Height);
-
-            //using (Graphics g = Graphics.FromImage(bitmaps[i]))
-            //{
-            //    using (Brush cloud_brush = new SolidBrush(Color.FromArgb(128, Color.Black)))
-            //    {
-            //        g.FillRectangle(cloud_brush, r);
-            //    }
-            //}
-
-            //Bitmap originalImage;
-            //Bitmap adjustedImage;
-
-
-
-
-            //var adjustedBitmap = ImageEnchancement.AdjustBCG(bitmaps[i]);
-            //var blurredBitmap = ImageEnchancement.FilterProcessImage(1.2, adjustedBitmap);
-            //List<Bitmap> blurB = new()
-            //{
-            //    blurredBitmap
-            //};
-            //CreateRotatedPdf("\\\\ARCH-FRIGATE\\Scans\\BCR Test\\20230808094920277s1e1.pdf", blurB);
-            //var blurredBitmap = ImageEnchancement.FilterProcessImage(1.2, bitmaps[i]);
-
             Console.Write($"Page {i+1}: ");
             decoded = BarCodeReader.ReadBarcodesOnOnePage(bitmaps[i]);
-            //decoded = BarCodeReader.ReadBarcodes(bitmaps[i]);
-
-            //if (decoded is not null && decoded.Filename is not null && foundBarcode is not null)
-            //{
-            //    if (foundBarcode.Filename == decoded.Filename)
-            //    {
-            //        decoded = foundBarcode;
-            //    }
-            //}
-
-            //if (decoded is not null && (decoded.Filename is null || decoded.Folderpath is null))
-            //{
-            //    throw new ArgumentOutOfRangeException("Did not find exactly two valid barcodes on one page");
-            //}
-            //if (bitmaps.Count == 1)
-            //{
-            //    decoded = BarCodeReader.ReadBarcodesOnOnePage(bitmaps[i]);
-            //}
-            //else
-            //{
-            //    decoded = BarCodeReader.ReadBarcodes(bitmaps[i]);
-            //}
-
-            //decoded = BarCodeReader.ReadBarcodes(blurredBitmap);
+            
             if (decoded is not null && foundBarcode is null)
             {
                 foundBarcode = decoded;
@@ -310,7 +259,7 @@ public class FileManipulator
                 }
 
                 File.WriteAllBytes(newFullPath, bytes);
-                Trace.WriteLine("Copied file to: " + destination + " Named it " + Path.GetFileName(newFullPath));
+                Trace.WriteLine("Copied file to: " + destination); //+ " Named it " + Path.GetFileName(newFullPath));
             }
             catch (Exception ex)
             {
