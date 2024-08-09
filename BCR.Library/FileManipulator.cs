@@ -140,7 +140,7 @@ public class FileManipulator
     {
         int counter = 001;
         string jpegPath = Path.ChangeExtension(path, ".jpeg");
-        jpegPath = Path.Combine("../../../../BCR.Library/Data/TempPng", Path.GetFileNameWithoutExtension(jpegPath) + Path.GetExtension(jpegPath));
+        jpegPath = Path.Combine("C:\\Users\\vladimir\\Downloads\\TempPng", Path.GetFileNameWithoutExtension(jpegPath) + Path.GetExtension(jpegPath));
         string pngFileName = Path.GetFileNameWithoutExtension(jpegPath);
         string jpegFilePath;
         var _fileHandler = new FileRotator();
@@ -159,7 +159,7 @@ public class FileManipulator
             {
                 string tempFileName = $"{pngFileName}({counter++:000})";
                 //string tempFileName = string.Format("{0}", counter++.ToString("000"));
-                jpegFilePath = Path.Combine("../../../../BCR.Library/Data/TempPng", tempFileName + Path.GetExtension(jpegPath));
+                jpegFilePath = Path.Combine("C:\\Users\\vladimir\\Downloads\\TempPng", tempFileName + Path.GetExtension(jpegPath));
             }
             while (File.Exists(jpegFilePath));
             File.WriteAllBytes(jpegFilePath, stream.ToArray());
