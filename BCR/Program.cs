@@ -37,5 +37,5 @@ FileWatcher.Watch();
 //    Console.WriteLine("Enter split page");
 //    splitPage = Console.ReadLine();
 //    Console.WriteLine("Creating new file...");
-//    FileManipulator.SplitPdf($"..\\..\\..\\..\\BCR.Library\\Data\\FailedScans\\{fileName}.pdf", Int32.Parse(splitPage) - 1);
+//    FileManipulator.SplitPdf($"C:\\Users\\vladimir\\Downloads\\FailedScans/{fileName}.pdf", Int32.Parse(splitPage) - 1);
 //}

@@ -162,8 +162,8 @@ public class BarCodeReader
 
         //var reader = new BarcodeReader(null, null, ls => new GlobalHistogramBinarizer(ls))
         //BarcodeReader reader = new(null, bitmap => new BitmapLuminanceSource(bitmap), luminance => new GlobalHistogramBinarizer(luminance))
-        BarcodeReader reader = new(null, bitmap => new BitmapLuminanceSource(bitmap), luminance => new HybridBinarizer(luminance))
-        //var reader = new BarcodeReader()
+        //BarcodeReader reader = new(null, bitmap => new BitmapLuminanceSource(bitmap), luminance => new HybridBinarizer(luminance))
+        var reader = new BarcodeReader()
         {
             //AutoRotate = true,
             Options = new DecodingOptions
@@ -202,7 +202,8 @@ public class BarCodeReader
         }
         else
         {
-            croppedTopRight = oBitmap.Clone(new RectangleF(oBitmap.Width * .65f, oBitmap.Height * .015f, oBitmap.Width * .35f, oBitmap.Height * .15f), oBitmap.PixelFormat);
+            //  0 + firstWidth(x) + secondWidth =< 1        | starting x point |                          | distance from x |
+            croppedTopRight = oBitmap.Clone(new RectangleF(oBitmap.Width * .55f, oBitmap.Height * .015f, oBitmap.Width * .449f, oBitmap.Height * .15f), oBitmap.PixelFormat);
             croppedBotRight = oBitmap.Clone(new RectangleF(oBitmap.Width * .43f, oBitmap.Height * .75f, oBitmap.Width * .57f, oBitmap.Height * .2f), oBitmap.PixelFormat);
         }
        
@@ -285,7 +286,7 @@ public class BarCodeReader
         else if (folderPath is null && fileName is not null && (oBitmap.Width > 6000 || oBitmap.Height > 6000))
         {
             Trace.TraceWarning($"Please enter folder path for this: {barcode.Filename}");
-            barcode.Folderpath = Console.ReadLine();
+            barcode.Folderpath = "\\\\ARCH-FRIGATE\\Scans\\Customers\\" + Console.ReadLine();
             Trace.TraceWarning($"Your input: {barcode.Folderpath}");
             if (!string.IsNullOrEmpty(barcode.Folderpath))
             {
