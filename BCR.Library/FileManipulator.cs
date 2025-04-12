@@ -71,7 +71,7 @@ public class FileManipulator
     {
         Barcode? foundBarcode = null;
         Barcode? decoded;
-        List<Barcode> decodedList = new();
+        List<Barcode> decodedList = [];
         int startPage = 0;
         for (int i = 0; i < bitmaps.Count; i++)
         {
@@ -177,7 +177,7 @@ public class FileManipulator
         foreach (Barcode b in barcodes)
         {
             int counter = 1;
-            List<string> listFiles = new();
+            List<string> listFiles = [];
             for (int i = b.StartPage + 1; i < b.EndPage + 2; i++)
             {
                 listFiles.Add(Path.Combine(folder, jpegPath + $"({i:000}).jpeg"));
@@ -198,7 +198,7 @@ public class FileManipulator
                     Height = img.Height
                 };
 
-                var firstImage = DocLib.Instance.JpegToPdf(new[] { jpImage });
+                var firstImage = DocLib.Instance.JpegToPdf([jpImage]);
 
                 string p = Path.Combine(folder + "/" + Path.GetFileNameWithoutExtension(file) + ".pdf");
                 File.WriteAllBytes(p, firstImage);
@@ -263,7 +263,6 @@ public class FileManipulator
             }
             catch (Exception ex)
             {
-                //Console.WriteLine(ex.Message);
                 Trace.WriteLine(ex.Message);
                 throw;
             }

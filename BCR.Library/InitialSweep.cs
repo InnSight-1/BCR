@@ -13,7 +13,6 @@ public class InitialSweep
         {
             foreach (var file in files)
             {
-                //Console.WriteLine("Found: "+file);
                 Trace.WriteLine("\nFound: " + file);
                 ProcessPDFBetter(file);
             }
@@ -34,7 +33,7 @@ public class InitialSweep
             {
                 var bitmaps = pdf.GetBitmaps(path, pageWidth, pageHeight);
                 // bitmaps = FileManipulator.MakeGrayscale(bitmaps);
-                //var bitmaps = pdf.GetBitmaps(path, pageWidth, pageHeight);
+
                 if (bitmaps.Count>0)
                 {
                     Console.WriteLine($"Processed {bitmaps.Count} page(s).");
@@ -42,10 +41,9 @@ public class InitialSweep
                     if (barcodes.Count>0)
                     {
                         Console.WriteLine("Checking if pages need rotation...");
-                        Stopwatch stopwatch = Stopwatch.StartNew();
+
                         var jpegPath = FileManipulator.CreateRotatedPdf(path, bitmaps);
-                        stopwatch.Stop();
-                        Console.WriteLine($"Process took {stopwatch.ElapsedMilliseconds} milliseconds");
+
                         try
                         {
                             FileManipulator.HandleFiles(barcodes, jpegPath);
@@ -64,14 +62,10 @@ public class InitialSweep
                     {
                         pageHeight += 500;
                         continue;
-                        //File.Move(path, "../../../../BCR.Library/Data/FailedScans/" + Path.GetFileName(path), true);
-                        //break;
                     }
-                    //File.Move(path, "../../../../BCR.Library/Data/OriginalScans/" + Path.GetFileName(path), true);
                 }
                 else
                 {
-                    //Console.WriteLine("No valid barcodes found. Moving file to FailedScans folder");
                     File.Copy(path, "\\\\ARCH-FRIGATE\\Scans\\Failed Scans" + Path.GetFileName(path), true);
                     //File.Move(path, "../../../../BCR.Library/Data/FailedScans/" + Path.GetFileName(path), true);
                     File.Move(path, "C:\\Users\\vladimir\\Downloads\\FailedScans/" + Path.GetFileName(path), true);
@@ -86,12 +80,8 @@ public class InitialSweep
         }
         if (pageHeight > 6220)
         {
-            //Console.WriteLine("ERR: Quality of a scanned image is too poor.");
             Trace.WriteLine("ERR: Quality of a scanned image is too poor.");
-            //Trace.WriteLine($"Splitting file starting at first page to page number {endPage+1}");
-            //string splitted = FileManipulator.SplitPdf(path, 0, endPage);
-            //FileManipulator.SplitPdf(path, endPage, endPage);
-            //FileManipulator.SplitPdf(path, endPage, lastPage);
+
             File.Copy(path, "\\\\ARCH-FRIGATE\\Scans\\Failed Scans\\" + Path.GetFileName(path), true);
             //File.Move(path, "../../../../BCR.Library/Data/FailedScans/" + Path.GetFileName(path), true);
             File.Move(path, "C:\\Users\\vladimir\\Downloads\\FailedScans/" + Path.GetFileName(path), true);

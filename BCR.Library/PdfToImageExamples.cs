@@ -8,21 +8,12 @@ using Docnet.Core.Models;
 namespace BCR.Library
 {
     [SupportedOSPlatform("windows")]
-    public class PdfToImageExamples
+    public class PdfToImageExamples(ExampleFixture fixture)
     {
-       // private const string Path = "../../../../BCR.Library/Data/173328.pdf";
+        private readonly ExampleFixture _fixture = fixture;
 
-        private readonly ExampleFixture _fixture;
-       // private readonly FileHandler _fileHandler;
-
-        public PdfToImageExamples(ExampleFixture fixture) //,FileHandler fileHandler)
-        {
-            _fixture = fixture;
-            //_fileHandler = fileHandler;
-        }
         public List<Bitmap> GetBitmaps(string path, int pageWidth, int pageHeight)
         {
-            Stopwatch stopwatch = Stopwatch.StartNew();
             bool fileIsNotReady = true;
             List<Bitmap> bitmaps = [];
 
@@ -42,12 +33,7 @@ namespace BCR.Library
                 }
             } while (fileIsNotReady);
 
-            using var docReader = _fixture.DocNet.GetDocReader(
-                path,
-                //new PageDimensions(1080, 1920));
-                //new PageDimensions(1900, 2900));
-                //new PageDimensions(5000, 6000));
-                new PageDimensions(pageWidth, pageHeight));
+            using var docReader = _fixture.DocNet.GetDocReader(path, new PageDimensions(pageWidth, pageHeight));
 
             var pageCount = docReader.GetPageCount();
             Trace.WriteLine($"{pageCount} page(s) detected. Getting bitmaps...");
@@ -55,7 +41,6 @@ namespace BCR.Library
             {
                 for (int i = 0; i < pageCount; i++)
                 {
-                    //Console.WriteLine($"Reading page {i + 1}...");
                     using var pageReader = docReader.GetPageReader(i);
 
                     var rawBytes = pageReader.GetImage();
@@ -63,7 +48,7 @@ namespace BCR.Library
                     var width = pageReader.GetPageWidth();
                     var height = pageReader.GetPageHeight();
                     var characters = pageReader.GetCharacters();
-                   // Console.WriteLine($"Getting bitmap of page {i + 1}...");
+
                     var bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
 
                     AddBytes(bmp, rawBytes);
@@ -72,8 +57,6 @@ namespace BCR.Library
                     bitmaps.Add(bmp);
                 }
             }
-            stopwatch.Stop();
-            Console.WriteLine($"Whole process took {stopwatch.ElapsedMilliseconds} milliseconds");
             return bitmaps;
         }
         private static void AddBytes(Bitmap bmp, byte[] rawBytes)

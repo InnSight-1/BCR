@@ -21,6 +21,11 @@ Trace.AutoFlush = true;
 //Stopwatch sw = Stopwatch.StartNew();
 Trace.Write("Program started on: ");
 Trace.WriteLine(DateTime.Now);
+
+Directory.CreateDirectory("C:\\Users\\vladimir\\Downloads\\TempPng");
+Directory.CreateDirectory("C:\\Users\\vladimir\\Downloads\\OriginalScans/");
+Directory.CreateDirectory("C:\\Users\\vladimir\\Downloads\\FailedScans/");
+
 InitialSweep.CheckFolderForPDF("\\\\ARCH-FRIGATE\\Scans\\BCR Test");
 //sw.Stop();
 //Console.WriteLine($"Initial sweep is over after {sw.ElapsedMilliseconds} milliseconds");

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BCR", "BCR\BCR.csproj", "{2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BCR.Library", "BCR.Library\BCR.Library.csproj", "{817951CC-C01A-4373-A821-90942FFF20EB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BCRWinFormsUI", "BCRWinFormsUI\BCRWinFormsUI.csproj", "{AE058731-0A8F-4CFC-8C62-7684C68B2C2B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{817951CC-C01A-4373-A821-90942FFF20EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{817951CC-C01A-4373-A821-90942FFF20EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{817951CC-C01A-4373-A821-90942FFF20EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE058731-0A8F-4CFC-8C62-7684C68B2C2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE058731-0A8F-4CFC-8C62-7684C68B2C2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE058731-0A8F-4CFC-8C62-7684C68B2C2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE058731-0A8F-4CFC-8C62-7684C68B2C2B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
